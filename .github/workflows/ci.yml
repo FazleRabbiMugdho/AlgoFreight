@@ -33,23 +33,31 @@ jobs:
   frontend:
     name: Frontend Build & Lint
     runs-on: ubuntu-latest
-    if: hashFiles('frontend/package.json') != ''
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check frontend exists
+        id: check
+        run: echo "exists=$([[ -f frontend/package.json ]] && echo true || echo false)" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Setup Node
+        if: steps.check.outputs.exists == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
+        if: steps.check.outputs.exists == 'true'
         run: npm ci
+        working-directory: frontend
 
       - name: Lint
+        if: steps.check.outputs.exists == 'true'
         run: npm run lint
+        working-directory: frontend
 
       - name: Build
+        if: steps.check.outputs.exists == 'true'
         run: npm run build
+        working-directory: frontend

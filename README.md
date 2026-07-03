@@ -7,6 +7,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql)](https://www.postgresql.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Status](https://img.shields.io/badge/status-in%20development-orange)]()
+[![CI](https://github.com/FazleRabbiMugdho/AlgoFreight/actions/workflows/ci.yml/badge.svg)](https://github.com/FazleRabbiMugdho/AlgoFreight/actions/workflows/ci.yml)
 
 ---
 

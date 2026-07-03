@@ -1,0 +1,57 @@
+### === .NET / C# ===
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Rr]elease/
+*.pdb
+appsettings.Development.json
+appsettings.Production.json
+
+### === Node / React / Vite ===
+node_modules/
+dist/
+build/
+.next/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+### === Environment / Secrets ===
+.env
+.env.local
+.env.*.local
+backend/**/appsettings.*.json
+!backend/**/appsettings.json
+
+### === Docker ===
+docker-compose.override.yml
+
+### === Database ===
+*.sqlite
+*.db
+
+### === Logs ===
+logs/
+*.log
+
+### === OS ===
+.DS_Store
+Thumbs.db
+
+### === Editor / IDE ===
+.vs/
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+
+### === Misc ===
+coverage/
+.turbo/

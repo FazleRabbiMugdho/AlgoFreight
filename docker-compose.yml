@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: algofreight-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: algofreight
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+    ports:
+      - "5432:5432"
+    volumes:
+      - algofreight_pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: algofreight-api
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=algofreight;Username=postgres;Password=changeme"
+      Jwt__Secret: "local-dev-secret-change-me"
+      Gemini__ApiKey: "${GEMINI_API_KEY}"
+    ports:
+      - "5000:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: algofreight-web
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE_URL: "http://localhost:5000"
+      VITE_SIGNALR_HUB_URL: "http://localhost:5000/hubs/dispatch"
+    command: npm run dev -- --host
+    ports:
+      - "3000:5173"
+
+volumes:
+  algofreight_pgdata:

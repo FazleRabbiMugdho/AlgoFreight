@@ -1,8 +1,11 @@
+using AlgoFreight.Application.Dtos;
+using AlgoFreight.Application.Exceptions;
 using AlgoFreight.Application.Interfaces;
 using AlgoFreight.Application.Mapping;
 using AlgoFreight.Domain.Entities;
 using AlgoFreight.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AlgoFreight.Api.Controllers;
 
@@ -11,10 +14,12 @@ namespace AlgoFreight.Api.Controllers;
 public class CargoController : ControllerBase
 {
     private readonly ICargoRepository _cargoRepo;
+    private readonly IGeminiCargoParser _geminiParser;
 
-    public CargoController(ICargoRepository cargoRepo)
+    public CargoController(ICargoRepository cargoRepo, IGeminiCargoParser? geminiParser = null)
     {
         _cargoRepo = cargoRepo;
+        _geminiParser = geminiParser!;
     }
 
     [HttpGet]
@@ -78,7 +83,51 @@ public class CargoController : ControllerBase
         await _cargoRepo.DeleteAsync(cargo, ct);
         return NoContent();
     }
+
+    /// <summary>
+    /// Parses a free-text cargo description using the Gemini AI API and
+    /// returns a preview CargoDto WITHOUT saving it to the database.
+    ///
+    /// WHY PARSE-THEN-CONFIRM instead of auto-save:
+    /// LLM output is inherently non-deterministic and can hallucinate
+    /// incorrect values (wrong weight, fabricated destinations, etc.).
+    /// Auto-saving unverified AI output directly to the database would
+    /// introduce data integrity risks. Instead, the frontend shows the
+    /// parsed result to the user for confirmation before the existing
+    /// POST /api/cargo endpoint actually persists it. This two-step flow
+    /// keeps a human in the loop for all database writes derived from AI.
+    /// </summary>
+    [HttpPost("parse")]
+    [EnableRateLimiting("ai-intake")]
+    public async Task<IActionResult> Parse([FromBody] ParseCargoRequest request, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(request.Text))
+            return BadRequest(new { error = "Text is required." });
+
+        try
+        {
+            var dto = await _geminiParser.ParseAsync(request.Text, ct);
+            return Ok(dto);
+        }
+        catch (CargoParsingException ex)
+        {
+            return UnprocessableEntity(new
+            {
+                error = "Could not parse cargo description. Please check the format and try again.",
+                detail = ex.Message
+            });
+        }
+        catch (AiServiceUnavailableException)
+        {
+            return StatusCode(503, new
+            {
+                error = "AI parsing is temporarily unavailable, please use the manual entry form."
+            });
+        }
+    }
 }
+
+public record ParseCargoRequest(string Text);
 
 public record CreateCargoRequest(
     string Description,

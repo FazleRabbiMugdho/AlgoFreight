@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Ping health endpoint
         run: |
-          curl -sSf https://your-backend-url.azurewebsites.net/health || echo "Ping failed, backend may be waking up"
+          curl -sSf --connect-timeout 5 --max-time 10 "${{ vars.BACKEND_HEALTH_URL }}" || echo "Ping failed, backend may be waking up"

@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgoFreight.Domain", "AlgoFreight.Domain\AlgoFreight.Domain.csproj", "{12C07BFE-3BCF-4951-9C9F-F9103EE1ED7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgoFreight.Application", "AlgoFreight.Application\AlgoFreight.Application.csproj", "{B19711CB-B5AA-4961-9FD4-2B123930C6D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgoFreight.Infrastructure", "AlgoFreight.Infrastructure\AlgoFreight.Infrastructure.csproj", "{8738A8A0-EE2F-417A-9B4A-7BA5BC1EC195}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgoFreight.Api", "AlgoFreight.Api\AlgoFreight.Api.csproj", "{2C270E1A-571A-4FEB-A1F7-C9C3AA7E396C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgoFreight.Tests", "AlgoFreight.Tests\AlgoFreight.Tests.csproj", "{F621FE87-6C36-44F0-BB7D-78278C947E75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12C07BFE-3BCF-4951-9C9F-F9103EE1ED7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C07BFE-3BCF-4951-9C9F-F9103EE1ED7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C07BFE-3BCF-4951-9C9F-F9103EE1ED7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C07BFE-3BCF-4951-9C9F-F9103EE1ED7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B19711CB-B5AA-4961-9FD4-2B123930C6D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B19711CB-B5AA-4961-9FD4-2B123930C6D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B19711CB-B5AA-4961-9FD4-2B123930C6D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B19711CB-B5AA-4961-9FD4-2B123930C6D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8738A8A0-EE2F-417A-9B4A-7BA5BC1EC195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8738A8A0-EE2F-417A-9B4A-7BA5BC1EC195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8738A8A0-EE2F-417A-9B4A-7BA5BC1EC195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8738A8A0-EE2F-417A-9B4A-7BA5BC1EC195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C270E1A-571A-4FEB-A1F7-C9C3AA7E396C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C270E1A-571A-4FEB-A1F7-C9C3AA7E396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C270E1A-571A-4FEB-A1F7-C9C3AA7E396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C270E1A-571A-4FEB-A1F7-C9C3AA7E396C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F621FE87-6C36-44F0-BB7D-78278C947E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F621FE87-6C36-44F0-BB7D-78278C947E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F621FE87-6C36-44F0-BB7D-78278C947E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F621FE87-6C36-44F0-BB7D-78278C947E75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -17,7 +17,9 @@ services:
       - key: Gemini__ApiKey
         sync: false
       - key: Cors__AllowedOrigins__0
-        value: https://your-frontend.onrender.com
+        value: http://localhost:5173
+      - key: Cors__AllowedOrigins__1
+        value: https://algo-freight.vercel.app
 
 databases:
   - name: algofreight-db

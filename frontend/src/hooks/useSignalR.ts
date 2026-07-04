@@ -6,7 +6,7 @@ import {
 } from '@microsoft/signalr';
 import type { ConnectionState, SignalRDispatchPayload } from '../types';
 
-const HUB_URL = import.meta.env.VITE_SIGNALR_HUB_URL ?? 'http://localhost:5228/hubs/dispatch';
+const HUB_URL = import.meta.env.VITE_SIGNALR_HUB_URL;
 
 type EventHandler = (...args: unknown[]) => void;
 

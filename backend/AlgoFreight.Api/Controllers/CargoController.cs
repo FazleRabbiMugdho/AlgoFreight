@@ -16,10 +16,10 @@ public class CargoController : ControllerBase
     private readonly ICargoRepository _cargoRepo;
     private readonly IGeminiCargoParser _geminiParser;
 
-    public CargoController(ICargoRepository cargoRepo, IGeminiCargoParser? geminiParser = null)
+    public CargoController(ICargoRepository cargoRepo, IGeminiCargoParser geminiParser)
     {
         _cargoRepo = cargoRepo;
-        _geminiParser = geminiParser!;
+        _geminiParser = geminiParser;
     }
 
     [HttpGet]

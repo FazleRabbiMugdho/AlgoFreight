@@ -59,7 +59,7 @@ public sealed class GeminiCargoParser : IGeminiCargoParser
             try
             {
                 var response = await _httpClient.PostAsJsonAsync(
-                    $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={_apiKey}",
+                    $"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key={_apiKey}",
                     requestBody,
                     cancellationToken);
 

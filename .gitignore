@@ -28,7 +28,7 @@ pnpm-debug.log*
 .env.local
 .env.*.local
 backend/**/appsettings.*.json
-!backend/**/appsettings.json
+backend/**/appsettings.json
 
 ### === Docker ===
 docker-compose.override.yml

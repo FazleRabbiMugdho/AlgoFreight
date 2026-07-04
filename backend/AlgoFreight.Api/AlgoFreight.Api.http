@@ -1,0 +1,33 @@
+@AlgoFreight.Api_HostAddress = http://localhost:5228
+
+### Health check
+GET {{AlgoFreight.Api_HostAddress}}/health
+Accept: application/json
+
+### List all cargo
+GET {{AlgoFreight.Api_HostAddress}}/api/cargo
+Accept: application/json
+
+### Create a cargo
+POST {{AlgoFreight.Api_HostAddress}}/api/cargo
+Content-Type: application/json
+
+{
+  "description": "200kg electronics to Chittagong",
+  "weightKg": 200,
+  "destination": "Chittagong",
+  "priority": "Urgent",
+  "isFragile": true
+}
+
+### List all trucks
+GET {{AlgoFreight.Api_HostAddress}}/api/truck
+Accept: application/json
+
+### Run greedy dispatch
+POST {{AlgoFreight.Api_HostAddress}}/api/dispatch/run
+Content-Type: application/json
+
+{
+  "algorithm": "GreedyFirstFitDecreasing"
+}

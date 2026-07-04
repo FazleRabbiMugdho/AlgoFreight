@@ -131,38 +131,61 @@ AlgoFreight/
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [Node.js 20+](https://nodejs.org/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- PostgreSQL (or use the provided Docker Compose service)
+- A [Google Gemini API key](https://aistudio.google.com/apikey) (for AI cargo parsing)
 
-### Run locally with Docker Compose
+### 1. Clone & configure
 ```bash
-git clone https://github.com/<your-username>/AlgoFreight.git
+git clone https://github.com/FazleRabbiMugdho/AlgoFreight.git
 cd AlgoFreight
+cp .env.example .env
+```
+
+Edit `.env` and fill in your values:
+```env
+POSTGRES_PASSWORD=your-secure-password
+JWT_SECRET=your-jwt-secret
+GEMINI_API_KEY=your-gemini-api-key
+```
+
+### 2. Run with Docker Compose (recommended)
+```bash
 docker-compose up --build
 ```
 - Frontend: `http://localhost:3000`
 - API + Swagger docs: `http://localhost:5000/swagger`
 
-### Manual setup (without Docker)
+### 3. Run manually (without Docker)
+
+**Backend** — requires a local PostgreSQL instance:
 ```bash
-# Backend
 cd backend/AlgoFreight.Api
 dotnet restore
 dotnet ef database update
+ConnectionStrings__Default="Host=localhost;Port=5432;Database=algofreight;Username=postgres;Password=YOUR_PASSWORD" \
+JWT_SECRET=your-jwt-secret \
+GEMINI_API_KEY=your-gemini-api-key \
 dotnet run
+```
 
-# Frontend
+**Frontend:**
+```bash
 cd frontend
+cp .env.example .env.local
 npm install
 npm run dev
 ```
 
 ### Environment variables
-Copy `.env.example` to `.env` in both `backend/` and `frontend/` and fill in:
-```
-POSTGRES_CONNECTION_STRING=
-GEMINI_API_KEY=
-JWT_SECRET=
-```
+
+| Variable | Where | Description |
+|---|---|---|
+| `POSTGRES_PASSWORD` | `.env` (root) | PostgreSQL password |
+| `JWT_SECRET` | `.env` (root) | JWT signing secret |
+| `GEMINI_API_KEY` | `.env` (root) | Google Gemini API key |
+| `VITE_API_BASE_URL` | `frontend/.env.local` | Backend API URL |
+| `VITE_SIGNALR_HUB_URL` | `frontend/.env.local` | SignalR hub URL |
+
+> **Note:** The root `.env` is used by Docker Compose. The `frontend/.env.local` is for local frontend dev only.
 
 ---
 

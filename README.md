@@ -160,10 +160,12 @@ docker-compose up --build
 ```bash
 cd backend/AlgoFreight.Api
 dotnet restore
+
+# Create your local config from the example
+cp appsettings.json.example appsettings.json
+# Edit appsettings.json with your real values (DB password, Gemini API key)
+
 dotnet ef database update
-ConnectionStrings__Default="Host=localhost;Port=5432;Database=algofreight;Username=postgres;Password=YOUR_PASSWORD" \
-JWT_SECRET=your-jwt-secret \
-GEMINI_API_KEY=your-gemini-api-key \
 dotnet run
 ```
 

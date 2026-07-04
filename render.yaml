@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: algofreight-api
+    runtime: docker
+    repo: https://github.com/FazleRabbiMugdho/AlgoFreight
+    branch: main
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__Default
+        fromDatabase:
+          name: algofreight-db
+          property: connectionString
+      - key: Jwt__Secret
+        sync: false
+      - key: Gemini__ApiKey
+        sync: false
+      - key: Cors__AllowedOrigins__0
+        value: https://your-frontend.onrender.com
+
+databases:
+  - name: algofreight-db
+    databaseName: algofreight
+    user: postgres

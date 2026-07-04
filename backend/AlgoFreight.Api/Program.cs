@@ -79,12 +79,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ---- Middleware pipeline ----
-if (app.Environment.IsDevelopment())
+// ---- Auto-migrate database ----
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<AlgoFreightDbContext>();
+    db.Database.Migrate();
 }
+
+// ---- Middleware pipeline ----
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("AllowFrontend");
 app.UseRateLimiter();

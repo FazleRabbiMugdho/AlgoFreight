@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+ENV NUGET_PACKAGES=/tmp/nuget
 
 COPY AlgoFreight.sln ./
 COPY AlgoFreight.Domain/AlgoFreight.Domain.csproj AlgoFreight.Domain/
@@ -8,13 +9,11 @@ COPY AlgoFreight.Infrastructure/AlgoFreight.Infrastructure.csproj AlgoFreight.In
 COPY AlgoFreight.Api/AlgoFreight.Api.csproj AlgoFreight.Api/
 COPY AlgoFreight.Tests/AlgoFreight.Tests.csproj AlgoFreight.Tests/
 
-RUN dotnet restore
-
 COPY . .
-RUN dotnet build -c Release --no-restore
+RUN dotnet restore && dotnet build -c Release
 
 FROM build AS publish
-RUN dotnet publish AlgoFreight.Api/AlgoFreight.Api.csproj -c Release -o /app/publish --no-build
+RUN dotnet publish AlgoFreight.Api/AlgoFreight.Api.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app

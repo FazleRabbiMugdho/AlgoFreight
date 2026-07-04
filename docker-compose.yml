@@ -4,9 +4,9 @@ services:
     container_name: algofreight-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: algofreight
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: ${POSTGRES_DB:-algofreight}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD in .env}
     ports:
       - "5432:5432"
     volumes:
@@ -21,9 +21,9 @@ services:
     depends_on:
       - db
     environment:
-      ConnectionStrings__Default: "Host=db;Port=5432;Database=algofreight;Username=postgres;Password=changeme"
-      Jwt__Secret: "local-dev-secret-change-me"
-      Gemini__ApiKey: "${GEMINI_API_KEY}"
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=${POSTGRES_DB:-algofreight};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?Please set POSTGRES_PASSWORD in .env}"
+      Jwt__Secret: ${JWT_SECRET:?Please set JWT_SECRET in .env}
+      Gemini__ApiKey: ${GEMINI_API_KEY:?Please set GEMINI_API_KEY in .env}
     ports:
       - "5000:8080"
 

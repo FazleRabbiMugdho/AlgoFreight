@@ -17,6 +17,8 @@ export function useSignalR() {
   const [lastDispatchEvent, setLastDispatchEvent] = useState<SignalRDispatchPayload | null>(null);
 
   useEffect(() => {
+    let stopped = false;
+
     const connection = new HubConnectionBuilder()
       .withUrl(HUB_URL)
       .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
@@ -26,7 +28,7 @@ export function useSignalR() {
     connectionRef.current = connection;
 
     connection.onclose(() => {
-      setConnectionState('Disconnected');
+      if (!stopped) setConnectionState('Disconnected');
     });
 
     connection.onreconnecting(() => {
@@ -41,16 +43,19 @@ export function useSignalR() {
       try {
         setConnectionState('Connecting');
         await connection.start();
-        setConnectionState('Connected');
+        if (!stopped) setConnectionState('Connected');
       } catch {
-        setConnectionState('Disconnected');
-        setTimeout(startConnection, 5000);
+        if (!stopped) {
+          setConnectionState('Disconnected');
+          setTimeout(startConnection, 5000);
+        }
       }
     };
 
     startConnection();
 
     return () => {
+      stopped = true;
       connection.stop();
       connectionRef.current = null;
     };
@@ -70,9 +75,11 @@ export function useSignalR() {
     };
 
     connection.on('DispatchCompleted', handler);
+    connection.on('dispatchcompleted', handler);
 
     return () => {
       connection.off('DispatchCompleted', handler);
+      connection.off('dispatchcompleted', handler);
     };
   }, []);
 

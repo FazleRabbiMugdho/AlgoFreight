@@ -34,6 +34,93 @@
   to { opacity: 1; }
 }
 
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+@keyframes shuffle {
+  0% {
+    opacity: 0.6;
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-4px) scale(1.02);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  75% {
+    transform: translateY(-2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gauge-fill {
+  from { stroke-dashoffset: var(--gauge-circ); }
+  to { stroke-dashoffset: var(--gauge-offset); }
+}
+
+@keyframes scan-line {
+  0% { top: 0; }
+  50% { top: 100%; }
+  100% { top: 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(99, 102, 241, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(99, 102, 241, 0.6); }
+}
+
+@keyframes progress-glow {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes flash-checkmark {
+  0% { opacity: 0; transform: scale(0.3); }
+  25% { opacity: 1; transform: scale(1.15); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 .animate-pulse-slow {
   animation: pulse-slow 2s ease-in-out infinite;
 }
@@ -48,6 +135,47 @@
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.3s ease-out;
+}
+
+.animate-slide-out-right {
+  animation: slide-out-right 0.35s ease-in forwards;
+}
+
+.animate-shuffle {
+  animation: shuffle 0.4s ease-in-out;
+}
+
+.animate-gauge-fill {
+  animation: gauge-fill 0.8s ease-out forwards;
+}
+
+.animate-scan-line {
+  animation: scan-line 2s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-progress-glow {
+  background-size: 200% 100%;
+  animation: progress-glow 2s linear infinite;
+}
+
+.animate-flash-checkmark {
+  animation: flash-checkmark 1s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.35s ease-out;
 }
 
 body {

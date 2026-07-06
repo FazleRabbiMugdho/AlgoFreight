@@ -1,4 +1,4 @@
-import { useState, type DragEvent } from 'react';
+import { useState, useEffect, useRef, type DragEvent } from 'react';
 import type { Cargo, Truck, ManifestRecord, CargoAssignmentState } from '../types';
 import { PriorityBadge } from './PriorityBadge';
 import { TruckCapacityBar } from './TruckCapacityBar';
@@ -171,14 +171,20 @@ export function OptimizationSplitView({
 function DraggableCargoCard({ cargo, state, onDragStart }: { cargo: Cargo; state?: CargoAssignmentState; onDragStart: (e: DragEvent<HTMLDivElement>) => void }) {
   const [isDragging, setIsDragging] = useState(false);
   const [showCheckmark, setShowCheckmark] = useState(false);
+  const prevStatusRef = useRef<string | undefined>(undefined);
 
   // Flash checkmark when transitioning to confirmed
-  const prevStatusRef = useState<string | undefined>(undefined);
-  if (state?.status === 'confirmed' && prevStatusRef[0] !== 'confirmed') {
-    setShowCheckmark(true);
-    setTimeout(() => setShowCheckmark(false), 1000);
-  }
-  prevStatusRef[0] = state?.status;
+  useEffect(() => {
+    if (state?.status === 'confirmed' && prevStatusRef.current !== 'confirmed') {
+      setShowCheckmark(true);
+      const timer = setTimeout(() => setShowCheckmark(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [state?.status]);
+
+  useEffect(() => {
+    prevStatusRef.current = state?.status;
+  });
 
   const isSyncing = state?.status === 'syncing';
   const isFailed = state?.status === 'failed';

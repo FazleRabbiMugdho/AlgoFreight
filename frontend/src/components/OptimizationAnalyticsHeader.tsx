@@ -1,4 +1,3 @@
-import type { DispatchRunResponse } from '../types';
 
 interface OptimizationAnalyticsHeaderProps {
   totalCapacityKg: number;

@@ -33,12 +33,13 @@ export function Layout() {
 
   useEffect(() => {
     if (connectionState === 'Connecting' || connectionState === 'Disconnected') {
+      const startTime = Date.now();
       const interval = setInterval(() => {
-        setLoadingDuration((prev) => prev + 1000);
+        setLoadingDuration(Date.now() - startTime);
       }, 1000);
-      return () => clearInterval(interval);
+      const reset = setTimeout(() => setLoadingDuration(0), 0);
+      return () => { clearInterval(interval); clearTimeout(reset); };
     }
-    setLoadingDuration(0);
   }, [connectionState]);
 
   // Global keyboard shortcuts

@@ -168,7 +168,7 @@ export function DispatcherDashboard() {
 
   // ---- Keep a ref to the latest callback ----
   const handleRunRef = useRef(handleRunOptimization);
-  handleRunRef.current = handleRunOptimization;
+  useEffect(() => { handleRunRef.current = handleRunOptimization; }, [handleRunOptimization]);
 
   // ---- Listen for command palette custom events ----
   useEffect(() => {

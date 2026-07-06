@@ -184,13 +184,19 @@ export function CargoIntakeModal({ isOpen, onClose, onConfirm }: CargoIntakeModa
     onClose();
   }, [onClose]);
 
-  const cooldownRemainingMs = rateLimit.cooldownEndsAt
-    ? Math.max(0, rateLimit.cooldownEndsAt - Date.now())
-    : 0;
+  const [cooldownRemainingMs, setCooldownRemaining] = useState(0);
   const cooldownSeconds = Math.ceil(cooldownRemainingMs / 1000);
   const cooldownProgress = rateLimit.cooldownEndsAt
     ? Math.max(0, cooldownRemainingMs / COOLDOWN_MS)
     : 0;
+
+  useEffect(() => {
+    if (!rateLimit.isCooldown || !rateLimit.cooldownEndsAt) return;
+    function tick() { setCooldownRemaining(Math.max(0, rateLimit.cooldownEndsAt! - Date.now())); }
+    tick();
+    const id = setInterval(tick, 200);
+    return () => clearInterval(id);
+  }, [rateLimit.isCooldown, rateLimit.cooldownEndsAt]);
 
   const isParseDisabled = !rawText.trim() || retryAttempt >= 0 || rateLimit.isCooldown;
 

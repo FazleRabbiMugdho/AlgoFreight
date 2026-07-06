@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface CommandAction {
@@ -102,7 +102,6 @@ export function CommandPalette({ isOpen, onClose, onOpenIntake, onRunOptimize }:
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [visible, setVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -127,64 +126,56 @@ export function CommandPalette({ isOpen, onClose, onOpenIntake, onRunOptimize }:
     (acc[a.category] ??= []).push(a);
     return acc;
   }, {});
-  const flatIndex = filtered.reduce<{ action: CommandAction; groupIdx: number }[]>((acc, a, i) => {
-    acc.push({ action: a, groupIdx: i });
-    return acc;
-  }, []);
 
-  // Reset selection on filter change
-  useEffect(() => { setSelectedIndex(0); }, [query]);
+  // Keep refs so the keyboard handler doesn't re-register on every keystroke
+  const filteredRef = useRef(filtered);
+  const selectedRef = useRef(selectedIndex);
+  useEffect(() => { filteredRef.current = filtered; });
+  useEffect(() => { selectedRef.current = selectedIndex; });
 
-  // Open/close animation toggle
-  useEffect(() => {
-    if (isOpen) {
-      setQuery('');
-      setVisible(true);
-      setTimeout(() => inputRef.current?.focus(), 60);
-    } else {
-      setVisible(false);
-    }
-  }, [isOpen]);
-
-  const executeSelected = useCallback(() => {
-    if (filtered[selectedIndex]) {
-      filtered[selectedIndex].action();
-    }
-  }, [filtered, selectedIndex]);
+  // Focus input when opening
+  useEffect(() => { inputRef.current?.focus(); }, [isOpen]);
 
   // Scroll selected item into view
   useEffect(() => {
     if (!listRef.current || !isOpen) return;
-    const selected = listRef.current.querySelector('[data-selected="true"]') as HTMLElement | null;
-    selected?.scrollIntoView({ block: 'nearest' });
+    listRef.current.querySelector('[data-selected="true"]')?.scrollIntoView({ block: 'nearest' });
   }, [selectedIndex, isOpen]);
 
-  // Keyboard navigation
+  // Keyboard navigation (stable deps via refs)
   useEffect(() => {
     if (!isOpen) return;
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') { e.preventDefault(); onClose(); return; }
-      if (e.key === 'ArrowDown') { e.preventDefault(); setSelectedIndex((i) => Math.min(i + 1, filtered.length - 1)); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); setSelectedIndex((i) => Math.min(i + 1, filteredRef.current.length - 1)); return; }
       if (e.key === 'ArrowUp') { e.preventDefault(); setSelectedIndex((i) => Math.max(i - 1, 0)); return; }
-      if (e.key === 'Enter') { e.preventDefault(); executeSelected(); return; }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const action = filteredRef.current[selectedRef.current];
+        if (action) action.action();
+        return;
+      }
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, filtered, selectedIndex, executeSelected]);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
+  function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(e.target.value);
+    setSelectedIndex(0);
+  }
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/30 backdrop-blur-sm pt-[12vh]"
-      onClick={onClose}
-    >
       <div
-        className={`w-full max-w-xl origin-top transition-all duration-200 ${
-          visible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-        }`}
-        onClick={(e) => e.stopPropagation()}
-      >
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/30 backdrop-blur-sm pt-[12vh]"
+          onClick={onClose}
+        >
+          <div
+            className="w-full max-w-xl origin-top"
+            onClick={(e) => e.stopPropagation()}
+          >
         <div className="overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-2xl shadow-slate-900/10 ring-1 ring-slate-900/5 dark:border-slate-700/60 dark:bg-slate-800 dark:shadow-black/30 dark:ring-slate-100/5">
           {/* Search input */}
           <div className="flex items-center gap-3 border-b border-slate-200 px-5 py-3.5 dark:border-slate-700/60">
@@ -192,7 +183,7 @@ export function CommandPalette({ isOpen, onClose, onOpenIntake, onRunOptimize }:
             <input
               ref={inputRef}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleQueryChange}
               placeholder="Search commands and pages…"
               className="flex-1 bg-transparent text-[15px] text-slate-800 placeholder-slate-400 outline-none dark:text-slate-200 dark:placeholder-slate-500"
             />

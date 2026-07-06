@@ -127,3 +127,11 @@ export interface ApiError {
 }
 
 export type ConnectionState = 'Connecting' | 'Connected' | 'Disconnected' | 'Reconnecting';
+
+export type AssignmentStatus = 'syncing' | 'confirmed' | 'failed';
+
+export interface CargoAssignmentState {
+  status: AssignmentStatus;
+  truckId: string | null;
+  error?: string;
+}

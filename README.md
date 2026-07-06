@@ -48,6 +48,9 @@ This isn't another CRUD app. The core of AlgoFreight is a **greedy multi-knapsac
 - ⚡ **Real-Time Dashboard** — SignalR pushes "Optimization Complete" events to the frontend the instant a dispatch run finishes — no polling
 - 🤖 **AI-Assisted Cargo Intake** — Natural-language cargo entry (e.g. *"200kg electronics to Chittagong, urgent, fragile"*) parsed into structured fields via LLM, before being handed to the deterministic algorithm
 - 📊 **Dispatch History & Audit Trail** — Every optimization run and manifest is persisted and viewable
+- ⌨️ **Command Palette & Keyboard Shortcuts** — Global `Ctrl+K` command palette with fuzzy search across Dispatch and Navigation actions. `Ctrl+Alt+*` shortcuts for AI Intake, Optimization, and page navigation. Toggleable shortcut cheat sheet via `?`.
+- 🎛️ **Dispatcher Dashboard** — Split-view UI with priority-sorted cargo cards, truck fleet capacity bars, draggable assignment flow, algorithmic analytics header, and activity feed with toast notifications.
+- 🔄 **Optimistic UI** — Cargo assignment updates instantly with a syncing badge and weight rollback on failure, with flash confirmations and error toasts.
 - 🐳 **One-Command Local Setup** — Full stack (API + DB + frontend) via Docker Compose
 
 ---
@@ -106,8 +109,18 @@ AlgoFreight/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── CommandPalette.tsx    # Ctrl+K search overlay
+│   │   │   ├── ShortcutCheatSheet.tsx # ?-toggled shortcuts panel
+│   │   │   ├── ShortcutBadge.tsx     # Inline hotkey badge
+│   │   │   ├── DispatcherDashboard.tsx # Main dispatch page
+│   │   │   ├── OptimizationSplitView.tsx
+│   │   │   ├── OptimizationAnalyticsHeader.tsx
+│   │   │   ├── CargoIntakeModal.tsx
+│   │   │   ├── ActivityFeed.tsx
+│   │   │   └── AiParseLoader.tsx
 │   │   ├── pages/
 │   │   ├── hooks/
+│   │   ├── logo/                    # Brand assets
 │   │   └── services/                # API client, SignalR connection
 │   └── ...
 ├── docker-compose.yml
@@ -208,6 +221,23 @@ AlgoFreight implements two strategies, selectable per dispatch run:
 | Exact 0/1 Knapsack (DP) | 500 Cargo / 1 Truck | `O(n · W)` | ~ 120 ms | Yes (exact) |
 
 *Benchmarks measured via the `ExecutionTimeMs` field returned on every `DispatchResult`, and validated against the 5,000-item performance sanity test in the test suite. This table exists to make the speed-vs-optimality tradeoff between the two strategies concrete rather than theoretical.*
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+K` / `Cmd+K` | Open Command Palette |
+| `?` | Toggle Shortcut Cheat Sheet |
+| `Ctrl+Alt+A` | Open AI Cargo Intake |
+| `Ctrl+Alt+O` | Run Optimization Solver |
+| `Ctrl+Alt+F` | Navigate to Fleet View |
+| `Ctrl+Alt+C` | Navigate to Cargo List |
+| `Ctrl+Alt+H` | Navigate to Dispatch History |
+| `Ctrl+Alt+Y` | Navigate to Analytics |
+
+All shortcuts work globally from any page.
 
 ---
 

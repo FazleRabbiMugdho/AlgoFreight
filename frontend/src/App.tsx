@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { DashboardPage } from './pages/DashboardPage';
+import { DispatcherDashboard } from './pages/DispatcherDashboard';
 import { CargoPage } from './pages/CargoPage';
 import { TrucksPage } from './pages/TrucksPage';
 import { HistoryPage } from './pages/HistoryPage';
@@ -12,6 +13,7 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<DashboardPage />} />
+          <Route path="dispatch" element={<DispatcherDashboard />} />
           <Route path="cargo" element={<CargoPage />} />
           <Route path="trucks" element={<TrucksPage />} />
           <Route path="history" element={<HistoryPage />} />
